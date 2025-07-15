@@ -2,9 +2,30 @@ package ru.astondev.Helper;
 
 import org.hibernate.cfg.Configuration;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+
 import static java.lang.System.exit;
 
 public class PropertyCheck {
+    private final String url;
+    private final String username;
+    private final String password;
+
+    public PropertyCheck(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
+
+    Connection getConnection() {
+        try {
+            return DriverManager.getConnection(url, username, password);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void checkProperties() {
         Configuration config = new Configuration().configure("hibernate.cfg.xml");
         String url = config.getProperty("hibernate.connection.url");
