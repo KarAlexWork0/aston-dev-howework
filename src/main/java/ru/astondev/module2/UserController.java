@@ -4,16 +4,26 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import ru.astondev.Helper.HibernateUtil;
+
 import java.util.logging.Logger;
 
 public class UserController implements UserDAO {
 
     private static final Logger logger = Logger.getLogger(UserController.class.getName());
+    private final SessionFactory sessionFactory;
+
+    public UserController() {
+        this.sessionFactory = HibernateUtil.getSessionFactory();
+    }
+
+    // inject mock SessionFactory
+    public UserController(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     public void createUser(User user) {
         Transaction transaction = null;
-        SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-        System.out.println(sessionFactory.getProperties()) ;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.persist(user);
@@ -28,7 +38,6 @@ public class UserController implements UserDAO {
     }
 
     public User getUserById(Long id) {
-        SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
         try (Session session = sessionFactory.openSession()) {
             User user = session.find(User.class, id);
             if (user != null) {
@@ -47,7 +56,6 @@ public class UserController implements UserDAO {
 
     public void updateUser(User user) {
         Transaction transaction = null;
-        SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.merge(user);
@@ -63,7 +71,6 @@ public class UserController implements UserDAO {
 
     public void deleteUser(Long id) {
         Transaction transaction = null;
-        SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             User user = session.find(User.class, id);

@@ -14,6 +14,7 @@ public class Main {
         while (!flag) {
             System.out.println("Choose module/homework (module 1 is on astondev.ru for now):");
             System.out.println("2: - Module 2 - Hibernate User Data Access Object " +
+                    "3: - Module 3 - " +
                     "\n9: exit");
 
             try {

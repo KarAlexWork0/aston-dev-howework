@@ -43,3 +43,4 @@ build/
 /.idea/dataSources.local.xml
 /.env
 /src/main/resources/hibernate.properties
+/src/test/resources/hibernate.properties

@@ -1,6 +1,6 @@
 package ru.astondev.module2;
 
-import ru.astondev.Helper.PropertyCheck;
+import ru.astondev.Helper.ConnectionProvider;
 
 import java.util.Scanner;
 
@@ -8,9 +8,11 @@ import static java.lang.System.exit;
 
 public class Module2Main {
     private static final Scanner scanner = new Scanner(System.in);
+    private static final UserService userService = new UserService();
 
     public static void main(String[] args) {
-        PropertyCheck.checkProperties();
+
+        ConnectionProvider.checkProperties();
         boolean exit = false;
         while (!exit) {
             printMainMenu();
@@ -28,7 +30,6 @@ public class Module2Main {
     }
 
     private static void createUser() {
-        UserController controller = new UserController();
         boolean flag = false;
         String[] userData = null;
         while (!flag) {
@@ -53,11 +54,10 @@ public class Module2Main {
         user.setEmail(email);
         user.setAge(age);
 
-        controller.createUser(user);
+        userService.createUser(user);
     }
 
     private static void getUserById() {
-        UserController controller = new UserController();
         boolean flag = false;
 
         while (!flag) {
@@ -67,7 +67,7 @@ public class Module2Main {
 
             try {
                 long userId = Long.parseLong(input);
-                User user = controller.getUserById(userId);
+                User user = userService.getUserById(userId);
                 System.out.println("Requested user " + user.toString());
                 flag = true;
             }
@@ -81,7 +81,6 @@ public class Module2Main {
     }
 
     private static void updateUser() {
-        UserController controller = new UserController();
         boolean flag = false;
         String[] userData = null;
         while (!flag) {
@@ -102,17 +101,16 @@ public class Module2Main {
         String name = userData[1], email = userData[2];
         int  age = Integer.parseInt(userData[3]);
 
-        User user = controller.getUserById(userId);
+        User user = userService.getUserById(userId);
 
         user.setUsername(name);
         user.setEmail(email);
         user.setAge(age);
 
-        controller.updateUser(user);
+        userService.updateUser(user);
     }
 
     private static void deleteUser() {
-        UserController controller = new UserController();
         boolean flag = false;
         while (!flag) {
             System.out.println("Enter Id to delete user \n or or type 'back' to return to main menu: ");
@@ -121,7 +119,7 @@ public class Module2Main {
 
             try {
                 long userId = Long.parseLong(input);
-                controller.deleteUser(userId);
+                userService.deleteUser(userId);
             }
             catch (NumberFormatException e) {
                 System.out.println("Invalid input, try again!: ");
